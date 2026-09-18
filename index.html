@@ -1,0 +1,2825 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FYP ProgressHub - Final Year Project Tracking Dashboard">
+<title>FYP ProgressHub | University of Lahore</title>
+
+<style>
+/* =========================================
+   FYP PROGRESSHUB
+   Single-file HTML / CSS / JavaScript
+========================================= */
+
+:root {
+  --purple: #5b3f8c;
+  --purple-dark: #3e285f;
+  --purple-light: #eee8f8;
+  --green: #3f8066;
+  --green-dark: #286049;
+  --green-light: #e7f2eb;
+  --beige: #f5efe4;
+  --brown: #8b6650;
+  --blue: #477ca9;
+  --blue-light: #e8f1f8;
+  --cream: #fcfaf6;
+  --white: #ffffff;
+  --text: #292433;
+  --muted: #837b8e;
+  --border: #e9e3ed;
+  --danger: #c65d66;
+  --shadow: 0 10px 35px rgba(68,44,94,.07);
+  --radius: 20px;
+  --transition: .25s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 95px;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+body.dark {
+  --cream: #17141e;
+  --white: #24202e;
+  --text: #f5f0fa;
+  --muted: #b5a9c4;
+  --border: #3a3148;
+  --purple-light: #382b4c;
+  --green-light: #243e34;
+  --blue-light: #263b4d;
+  --beige: #352c28;
+  --purple-dark: #251c36;
+  --shadow: 0 10px 35px rgba(0,0,0,.15);
+}
+
+body,
+.card,
+.navbar,
+.form-control,
+.doc-item,
+.goal-item,
+.info-item,
+.member {
+  transition: background .25s ease, color .25s ease,
+              border-color .25s ease;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(91,63,140,.3);
+  outline-offset: 3px;
+}
+
+.container {
+  width: min(1180px, calc(100% - 40px));
+  margin: auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.section {
+  padding: 43px 0;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--purple);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.section-heading h2 {
+  font-size: clamp(1.5rem, 3vw, 2.05rem);
+  line-height: 1.2;
+  letter-spacing: -.6px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  margin-top: 7px;
+  font-size: .9rem;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.card-pad {
+  padding: 25px;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.btn {
+  border: 0;
+  border-radius: 11px;
+  padding: 11px 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: .82rem;
+  transition: var(--transition);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(.97);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: white;
+}
+
+.btn-green {
+  background: var(--green);
+  color: white;
+}
+
+.btn-light {
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-danger {
+  color: var(--danger);
+  background: #fff0f1;
+}
+
+.btn-small {
+  padding: 7px 11px;
+  font-size: .72rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 30px;
+  font-size: .7rem;
+  font-weight: 800;
+}
+
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+.badge-green { background: var(--green-light); color: var(--green-dark); }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
+.badge-beige { background: #f3e9dc; color: var(--brown); }
+
+.progress-track {
+  width: 100%;
+  height: 9px;
+  border-radius: 20px;
+  background: #ede8f0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--purple), #9c80c4);
+  transition: width .4s ease;
+}
+
+.progress-fill.green {
+  background: linear-gradient(90deg, var(--green), #73b18e);
+}
+
+.progress-fill.blue {
+  background: linear-gradient(90deg, var(--blue), #8db8d7);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 30px 15px;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 2000;
+  background: var(--purple-dark);
+  color: white;
+  padding: 13px 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,.15);
+  font-size: .82rem;
+  max-width: min(360px, calc(100% - 44px));
+  animation: toastIn .25s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+.navbar {
+  height: 76px;
+  background: rgba(255,255,255,.94);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(14px);
+}
+
+body.dark .navbar {
+  background: rgba(36,32,46,.95);
+}
+
+.nav-inner {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 43px;
+  height: 43px;
+  border-radius: 13px;
+  background: var(--purple);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  box-shadow: 0 5px 15px rgba(91,63,140,.2);
+}
+
+.brand-text strong {
+  display: block;
+  font-size: .98rem;
+  letter-spacing: -.3px;
+}
+
+.brand-text span {
+  color: var(--muted);
+  display: block;
+  font-size: .65rem;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nav-link {
+  padding: 9px 12px;
+  border-radius: 9px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: var(--purple-light);
+  color: var(--purple);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--beige);
+  color: var(--brown);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: .8rem;
+}
+
+.menu-toggle {
+  display: none;
+  border: 0;
+  background: var(--purple-light);
+  color: var(--purple);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 1.2rem;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero {
+  padding: 45px 0 25px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 25px;
+  align-items: stretch;
+}
+
+.hero-main {
+  position: relative;
+  overflow: hidden;
+  padding: 37px;
+  border-radius: 25px;
+  background: linear-gradient(130deg, #4c3374, #71549b);
+  color: white;
+  min-height: 315px;
+}
+
+.hero-main::before {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.1);
+  right: -100px;
+  top: -90px;
+}
+
+.hero-main::after {
+  content: "";
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.1);
+  right: 40px;
+  bottom: -100px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 580px;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255,255,255,.13);
+  padding: 6px 11px;
+  border-radius: 30px;
+  font-size: .7rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -1px;
+  margin-bottom: 15px;
+}
+
+.hero h1 span {
+  color: #d7efdf;
+}
+
+.hero p {
+  color: #e6def0;
+  font-size: .9rem;
+  max-width: 500px;
+  margin-bottom: 25px;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-buttons .btn-primary {
+  background: white;
+  color: var(--purple);
+}
+
+.hero-buttons .btn-outline {
+  color: white;
+  border-color: rgba(255,255,255,.35);
+}
+
+.hero-side {
+  background: var(--beige);
+  border-radius: 25px;
+  padding: 28px;
+  border: 1px solid #eadfd1;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-side h3 {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.hero-side p {
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+.uni-logo {
+  width: 88px;
+  height: 88px;
+  background: white;
+  border: 1px solid #e6dacc;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  margin: 22px 0;
+  color: var(--purple);
+  font-size: 2.1rem;
+  font-weight: 900;
+}
+
+.uni-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 15px;
+  display: block;
+}
+
+.uni-logo small {
+  font-size: .55rem;
+  display: block;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.uni-name {
+  font-size: 1.05rem;
+  font-weight: 850;
+  line-height: 1.3;
+  max-width: 240px;
+}
+
+.uni-location {
+  color: var(--brown);
+  font-size: .78rem;
+  margin-top: 5px;
+}
+
+/* =========================================
+   STATS
+========================================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 17px;
+}
+
+.stat-card {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.stat-icon {
+  width: 47px;
+  height: 47px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+}
+
+.stat-icon.purple { background: var(--purple-light); }
+.stat-icon.green { background: var(--green-light); }
+.stat-icon.blue { background: var(--blue-light); }
+.stat-icon.beige { background: #f3e9dc; }
+
+.stat-label {
+  color: var(--muted);
+  font-size: .73rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 1.7rem;
+  font-weight: 850;
+  line-height: 1.3;
+  letter-spacing: -.7px;
+}
+
+/* =========================================
+   OVERVIEW
+========================================= */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1.4fr .9fr;
+  gap: 20px;
+}
+
+.overview-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.info-item {
+  padding: 15px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.info-item label {
+  color: var(--muted);
+  display: block;
+  font-size: .68rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.info-item strong {
+  font-size: .84rem;
+  overflow-wrap: anywhere;
+}
+
+.progress-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.progress-big {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.progress-big strong {
+  font-size: 3.2rem;
+  line-height: 1.1;
+  color: var(--purple);
+  letter-spacing: -2px;
+}
+
+.progress-big span {
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.progress-caption {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: .7rem;
+  margin-top: 8px;
+}
+
+/* =========================================
+   GOALS
+========================================= */
+
+.goals-layout {
+  display: grid;
+  grid-template-columns: 1.4fr .7fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal-item {
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 17px;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.goal-item:hover {
+  border-color: #d9cce9;
+  box-shadow: 0 5px 18px rgba(68,44,94,.04);
+}
+
+.goal-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.goal-name {
+  font-size: .88rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.goal-name .check {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: var(--purple-light);
+  color: var(--purple);
+  font-size: .75rem;
+}
+
+.goal-description {
+  color: var(--muted);
+  font-size: .75rem;
+  margin: 7px 0 13px 32px;
+}
+
+.goal-bottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 32px;
+}
+
+.goal-bottom .progress-track {
+  margin: 0;
+  height: 7px;
+  flex: 1;
+}
+
+.goal-percent {
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--purple);
+  min-width: 35px;
+  text-align: right;
+}
+
+.goal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 0 32px;
+}
+
+.goal-actions .btn {
+  padding: 6px 10px;
+  font-size: .68rem;
+}
+
+.add-goal-card {
+  position: sticky;
+  top: 95px;
+}
+
+.add-goal-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: .73rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.form-control {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 11px 12px;
+  background: var(--cream);
+  color: var(--text);
+  outline: none;
+  font-size: .82rem;
+}
+
+.form-control:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(91,63,140,.08);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 78px;
+}
+
+/* =========================================
+   DOCUMENTATION
+========================================= */
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.doc-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  transition: var(--transition);
+}
+
+.doc-item:hover {
+  background: var(--cream);
+  border-color: #d9cce9;
+}
+
+.doc-icon {
+  width: 42px;
+  height: 45px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  background: var(--purple-light);
+}
+
+.doc-icon.green { background: var(--green-light); }
+.doc-icon.blue { background: var(--blue-light); }
+.doc-icon.brown { background: #f3e9dc; }
+
+.doc-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-info strong {
+  display: block;
+  font-size: .8rem;
+  overflow-wrap: anywhere;
+}
+
+.doc-info span {
+  display: block;
+  font-size: .69rem;
+  color: var(--muted);
+}
+
+.doc-actions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.doc-actions .btn {
+  padding: 6px 9px;
+  font-size: .68rem;
+}
+
+/* =========================================
+   TEAM & SUPERVISOR
+========================================= */
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--purple-light);
+  color: var(--purple);
+  font-weight: 850;
+  font-size: .9rem;
+  flex-shrink: 0;
+}
+
+.avatar.green { background: var(--green-light); color: var(--green-dark); }
+.avatar.brown { background: #f3e9dc; color: var(--brown); }
+
+.member-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-info strong {
+  display: block;
+  font-size: .83rem;
+}
+
+.member-info span {
+  color: var(--muted);
+  font-size: .72rem;
+}
+
+.member-status {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #61ad82;
+  flex-shrink: 0;
+}
+
+.supervisor-box {
+  background: linear-gradient(135deg, #f5efe4, #eee5f5);
+  border: 1px solid #e9deed;
+  border-radius: 16px;
+  padding: 24px;
+  color: #292433;
+}
+
+.supervisor-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.supervisor-avatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 19px;
+  background: var(--purple);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.supervisor-header h3 {
+  font-size: 1.05rem;
+}
+
+.supervisor-header p {
+  color: #837b8e;
+  font-size: .75rem;
+}
+
+.supervisor-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.supervisor-details div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: .76rem;
+}
+
+.supervisor-details span {
+  color: #837b8e;
+}
+
+/* =========================================
+   UNIVERSITY & CONTACT
+========================================= */
+
+.university-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.uni-detail-card {
+  padding: 27px;
+  background: var(--purple-dark);
+  color: white;
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
+
+.uni-detail-card::after {
+  content: "✦";
+  position: absolute;
+  font-size: 14rem;
+  color: rgba(255,255,255,.035);
+  right: -35px;
+  top: -60px;
+}
+
+.uni-detail-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.uni-detail-card h3 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  margin: 14px 0 10px;
+}
+
+.uni-detail-card p {
+  color: #d7cde5;
+  font-size: .82rem;
+  max-width: 390px;
+}
+
+.uni-detail-list {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.uni-detail-list li {
+  display: flex;
+  gap: 10px;
+  font-size: .77rem;
+  color: #e7dff0;
+}
+
+.uni-detail-list b {
+  color: white;
+  min-width: 90px;
+}
+
+.contact-card {
+  padding: 27px;
+}
+
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 15px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--green-light);
+  color: var(--green-dark);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.contact-item strong {
+  display: block;
+  font-size: .82rem;
+}
+
+.contact-item span {
+  display: block;
+  font-size: .72rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.contact-form {
+  margin-top: 23px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.contact-form .form-group {
+  margin-bottom: 12px;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+  background: #292238;
+  color: white;
+  padding: 35px 0 20px;
+  margin-top: 35px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.footer-brand {
+  max-width: 320px;
+}
+
+.footer-brand .brand-mark {
+  background: rgba(255,255,255,.12);
+}
+
+.footer-brand .brand-text strong {
+  color: white;
+}
+
+.footer-brand p {
+  color: #b9afc7;
+  font-size: .78rem;
+  margin-top: 14px;
+}
+
+.footer-links h4 {
+  font-size: .8rem;
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  display: block;
+  color: #b9afc7;
+  font-size: .75rem;
+  margin-bottom: 7px;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.1);
+  margin-top: 30px;
+  padding-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  color: #a99fb8;
+  font-size: .7rem;
+}
+
+/* =========================================
+   CURSOR ROBOT
+========================================= */
+
+#robot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 47px;
+  height: 47px;
+  z-index: 900;
+  pointer-events: none;
+  transform: translate(-100px,-100px);
+  transition: transform .12s ease-out;
+  filter: drop-shadow(0 5px 7px rgba(45,30,65,.13));
+}
+
+.robot-body {
+  width: 36px;
+  height: 30px;
+  background: white;
+  border: 2px solid var(--purple);
+  border-radius: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 5px;
+}
+
+.robot-eye {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  position: absolute;
+  top: 10px;
+}
+
+.robot-eye.left { left: 8px; }
+.robot-eye.right { right: 8px; }
+
+.robot-mouth {
+  position: absolute;
+  width: 13px;
+  height: 4px;
+  background: var(--purple-light);
+  border-radius: 5px;
+  bottom: 6px;
+  left: 10px;
+}
+
+.robot-antenna {
+  width: 2px;
+  height: 9px;
+  background: var(--purple);
+  position: absolute;
+  left: 17px;
+  top: -10px;
+}
+
+.robot-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  position: absolute;
+  left: 15px;
+  top: -14px;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1050px) {
+  .nav-links {
+    gap: 0;
+  }
+
+  .nav-link {
+    padding: 9px 8px;
+  }
+
+  .hero-grid,
+  .overview-grid,
+  .goals-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-side {
+    min-height: 220px;
+  }
+
+  .uni-logo {
+    margin: 15px 0;
+  }
+
+  .add-goal-card {
+    position: static;
+  }
+}
+
+@media (max-width: 850px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .docs-grid,
+  .team-grid,
+  .university-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 12px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-actions .btn {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: min(100% - 28px, 1180px);
+  }
+
+  .section {
+    padding: 28px 0;
+  }
+
+  .hero {
+    padding: 25px 0 10px;
+  }
+
+  .hero-main {
+    padding: 27px 22px;
+    min-height: 0;
+  }
+
+  .hero-side {
+    padding: 23px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+  }
+
+  .stats-grid {
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.35rem;
+  }
+
+  .stat-label {
+    font-size: .65rem;
+  }
+
+  .card-pad {
+    padding: 18px;
+  }
+
+  .overview-info {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .goal-description,
+  .goal-bottom,
+  .goal-actions {
+    margin-left: 0;
+  }
+
+  .goal-bottom {
+    gap: 8px;
+  }
+
+  .doc-item {
+    align-items: flex-start;
+  }
+
+  .doc-actions {
+    flex-direction: column;
+  }
+
+  .doc-actions .btn {
+    width: 100%;
+  }
+
+  .footer-top {
+    flex-direction: column;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+  }
+
+  #robot {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+.thank-you-message {
+  display: none;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+  font-weight: 700;
+  text-align: center;
+  animation: messageAppear 0.3s ease;
+}
+
+.thank-you-message.show {
+  display: block;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================================
+     NAVIGATION
+========================================= -->
+
+<header class="navbar">
+  <div class="container nav-inner">
+
+    <a href="#home" class="brand" aria-label="FYP ProgressHub home">
+      <div class="brand-mark">✦</div>
+      <div class="brand-text">
+        <strong>FYP ProgressHub</strong>
+        <span>Academic Project Management</span>
+      </div>
+    </a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#home" class="nav-link active">Overview</a>
+      <a href="#goals" class="nav-link">Goals</a>
+      <a href="#documents" class="nav-link">Documents</a>
+      <a href="#team" class="nav-link">Team</a>
+      <a href="#university" class="nav-link">University</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="btn btn-light btn-small"
+              id="themeToggle"
+              type="button"
+              aria-label="Toggle dark mode">
+        ☾
+      </button>
+
+      <div class="profile" title="FYP Team">FT</div>
+
+      <button class="menu-toggle"
+              id="menuToggle"
+              type="button"
+              aria-label="Toggle navigation"
+              aria-expanded="false">
+        ☰
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<main id="home">
+
+<!-- =========================================
+     HERO SECTION
+========================================= -->
+
+<section class="hero">
+  <div class="container hero-grid">
+
+    <div class="hero-main">
+      <div class="hero-content">
+
+        <div class="hero-kicker">
+          <span>●</span>
+          FINAL YEAR PROJECT · 2027-28
+        </div>
+
+        <h1>
+          Manage your FYP.<br>
+          <span>Achieve your goals.</span>
+        </h1>
+
+        <p>
+          Your centralized academic workspace for tracking
+          project progress, managing goals, organizing documents,
+          and collaborating with your team.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#goals" class="btn btn-primary">
+            View Project Goals →
+          </a>
+
+          <a href="#team" class="btn btn-outline">
+            Meet the Team
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="hero-side">
+
+      <span class="badge badge-beige">🎓 Academic Workspace</span>
+
+      <h3 style="margin-top:14px;">
+        The University of Lahore
+      </h3>
+
+      <p>Faculty of Information Technology</p>
+
+      <div class="uni-logo" aria-label="University of Lahore logo">
+          <img
+               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGifiNscybQ4DoEBQGY5rzrkEQ002Xq8q2uPbEw378Uw&s=10"
+               alt="University of Lahore logo">
+      </div>
+
+      <div class="uni-name">
+        The University of Lahore
+      </div>
+
+      <div class="uni-location">
+        📍 Lahore, Punjab, Pakistan
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================================
+     STATS
+========================================= -->
+
+<section class="section" style="padding-top:20px;">
+  <div class="container">
+    <div class="stats-grid">
+
+      <div class="card stat-card">
+        <div class="stat-icon purple">🎯</div>
+        <div>
+          <div class="stat-label">Total Goals</div>
+          <div class="stat-value" id="totalGoals">4</div>
+        </div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-icon green">✓</div>
+        <div>
+          <div class="stat-label">Completed</div>
+          <div class="stat-value" id="completedGoals">0</div>
+        </div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-icon blue">📊</div>
+        <div>
+          <div class="stat-label">Project Progress</div>
+          <div class="stat-value" id="projectProgress">0%</div>
+        </div>
+      </div>
+
+      <div class="card stat-card">
+        <div class="stat-icon beige">📄</div>
+        <div>
+          <div class="stat-label">Documents</div>
+          <div class="stat-value" id="totalDocuments">6</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     PROJECT OVERVIEW
+========================================= -->
+
+<section class="section" id="overview">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="eyebrow">✦ Project Overview</div>
+      <h2>Your project at a glance</h2>
+      <p>Stay informed about your academic project and its current progress.</p>
+    </div>
+
+    <div class="overview-grid">
+
+      <div class="card card-pad">
+
+        <div class="card-top">
+          <div class="card-title">Project Information</div>
+          <span class="badge badge-green">Active</span>
+        </div>
+
+        <div class="overview-info">
+
+          <div class="info-item">
+            <label>Project Name</label>
+            <strong>FYP ProgressHub</strong>
+          </div>
+
+          <div class="info-item">
+            <label>Project Type</label>
+            <strong>Final Year Project</strong>
+          </div>
+
+          <div class="info-item">
+            <label>University</label>
+            <strong>The University of Lahore</strong>
+          </div>
+
+          <div class="info-item">
+            <label>Academic Session</label>
+            <strong>2024-28</strong>
+          </div>
+
+          <div class="info-item">
+            <label>Supervisor</label>
+            <strong>Ma’am Rabiya Ali</strong>
+          </div>
+
+          <div class="info-item">
+            <label>Team Size</label>
+            <strong>3 Members</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card card-pad progress-card">
+
+        <div class="card-top">
+          <div class="card-title">Overall Progress</div>
+          <span class="badge badge-purple">Live Tracker</span>
+        </div>
+
+        <div class="progress-big">
+          <strong id="overallProgress">0%</strong>
+          <span>completed</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill"
+               id="overallProgressBar"
+               style="width:0%;">
+          </div>
+        </div>
+
+        <div class="progress-caption">
+          <span>Project completion</span>
+          <strong id="overallProgressCaption">0%</strong>
+        </div>
+
+        <div style="margin-top:24px;">
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:.78rem;margin-bottom:8px;">
+            <span class="muted">Goals completed</span>
+            <strong id="goalRatio">0 / 4</strong>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill green"
+                 id="goalRatioBar"
+                 style="width:0%;">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     GOAL TRACKER
+========================================= -->
+
+<section class="section" id="goals">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="eyebrow">✦ Goal Management</div>
+      <h2>Track your project goals</h2>
+      <p>Add goals, update progress, and mark milestones as completed.</p>
+    </div>
+
+    <div class="goals-layout">
+
+      <div class="card card-pad">
+
+        <div class="card-top">
+          <div class="card-title">Project Goals</div>
+          <span class="badge badge-purple" id="goalBadge">4 Goals</span>
+        </div>
+
+        <div class="goal-list" id="goalList">
+
+          <!-- Goals are rendered by JavaScript -->
+
+        </div>
+
+      </div>
+
+      <div class="card card-pad add-goal-card">
+
+        <div class="card-top">
+          <div class="card-title">Add New Goal</div>
+          <span style="font-size:1.2rem;">＋</span>
+        </div>
+
+        <form id="goalForm">
+
+          <div class="form-group">
+            <label for="goalTitle">Goal Title</label>
+            <input
+              id="goalTitle"
+              class="form-control"
+              type="text"
+              placeholder="e.g. Complete testing"
+              maxlength="80"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="goalDescription">Description</label>
+            <textarea
+              id="goalDescription"
+              class="form-control"
+              placeholder="Describe the goal..."
+              maxlength="250"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="goalStartProgress">Initial Progress</label>
+            <select id="goalStartProgress" class="form-control">
+              <option value="0">0% — Not started</option>
+              <option value="25">25% — Started</option>
+              <option value="50">50% — In progress</option>
+              <option value="75">75% — Nearly complete</option>
+              <option value="100">100% — Complete</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" type="submit">
+            + Add Goal
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     DOCUMENTATION CENTER
+========================================= -->
+
+<section class="section" id="documents">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="eyebrow">✦ Documentation Center</div>
+      <h2>Keep your project organized</h2>
+      <p>Manage important FYP documents from one central workspace.</p>
+    </div>
+
+    <div class="docs-grid">
+
+      <div class="card card-pad">
+
+        <div class="card-top">
+          <div class="card-title">Project Documents</div>
+          <span class="badge badge-blue" id="docBadge">6 Files</span>
+        </div>
+
+        <div class="doc-list" id="docList">
+
+          <div class="doc-item">
+            <div class="doc-icon">📄</div>
+            <div class="doc-info">
+              <strong>Project Proposal</strong>
+              <span>PDF · Academic document</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-light btn-small"
+                      type="button"
+                      data-doc="Project Proposal">
+                View
+              </button>
+            </div>
+          </div>
+
+          <div class="doc-item">
+            <div class="doc-icon green">📘</div>
+            <div class="doc-info">
+              <strong>Software Requirements</strong>
+              <span>PDF · Project specifications</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-light btn-small"
+                      type="button"
+                      data-doc="Software Requirements">
+                View
+              </button>
+            </div>
+          </div>
+
+          <div class="doc-item">
+            <div class="doc-icon blue">📊</div>
+            <div class="doc-info">
+              <strong>System Design</strong>
+              <span>PDF · Architecture and design</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-light btn-small"
+                      type="button"
+                      data-doc="System Design">
+                View
+              </button>
+            </div>
+          </div>
+
+          <div class="doc-item">
+            <div class="doc-icon brown">📝</div>
+            <div class="doc-info">
+              <strong>Progress Report</strong>
+              <span>DOCX · Project progress</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-light btn-small"
+                      type="button"
+                      data-doc="Progress Report">
+                View
+              </button>
+            </div>
+          </div>
+
+          <div class="doc-item">
+            <div class="doc-icon">📋</div>
+            <div class="doc-info">
+              <strong>Meeting Notes</strong>
+              <span>DOCX · Supervisor meetings</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-light btn-small"
+                      type="button"
+                      data-doc="Meeting Notes">
+                View
+              </button>
+            </div>
+          </div>
+
+          <div class="doc-item">
+            <div class="doc-icon green">🎓</div>
+            <div class="doc-info">
+              <strong>Final Report</strong>
+              <span>PDF · Final submission</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn btn-light btn-small"
+                      type="button"
+                      data-doc="Final Report">
+                View
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card card-pad">
+
+        <div class="card-top">
+          <div class="card-title">Documentation Checklist</div>
+          <span class="badge badge-green">Progress</span>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;gap:10px;font-size:.8rem;margin-bottom:8px;">
+            <span class="muted">Documentation readiness</span>
+            <strong id="docProgressText">0%</strong>
+          </div>
+
+          <div class="progress-track">
+            <div class="progress-fill green"
+                 id="docProgressBar"
+                 style="width:0%;">
+            </div>
+          </div>
+        </div>
+
+        <div id="docChecklist">
+
+          <label style="display:flex;gap:10px;align-items:center;margin-bottom:15px;font-size:.8rem;">
+            <input type="checkbox" class="doc-check">
+            Project proposal prepared
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:center;margin-bottom:15px;font-size:.8rem;">
+            <input type="checkbox" class="doc-check">
+            Requirements documented
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:center;margin-bottom:15px;font-size:.8rem;">
+            <input type="checkbox" class="doc-check">
+            System design completed
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:center;margin-bottom:15px;font-size:.8rem;">
+            <input type="checkbox" class="doc-check">
+            Testing report prepared
+          </label>
+
+          <label style="display:flex;gap:10px;align-items:center;margin-bottom:15px;font-size:.8rem;">
+            <input type="checkbox" class="doc-check">
+            Final report completed
+          </label>
+
+        </div>
+
+        <button class="btn btn-outline"
+                type="button"
+                id="resetChecklist">
+          Reset Checklist
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     TEAM & SUPERVISOR
+========================================= -->
+
+<section class="section" id="team">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="eyebrow">✦ Our Team</div>
+      <h2>Meet the project team</h2>
+      <p>Dedicated students working together to achieve project milestones.</p>
+    </div>
+
+    <div class="team-grid">
+
+      <div class="card card-pad">
+
+        <div class="card-top">
+          <div class="card-title">Team Members</div>
+          <span class="badge badge-purple">3 Students</span>
+        </div>
+
+        <div class="team-list">
+
+          <div class="member">
+            <div class="avatar">AR</div>
+            <div class="member-info">
+              <strong>Azhan Riaz</strong>
+              <span>FYP Team Member</span>
+            </div>
+            <div class="member-status" title="Team member"></div>
+          </div>
+
+          <div class="member">
+            <div class="avatar green">AA</div>
+            <div class="member-info">
+              <strong>Arriyan Asif</strong>
+              <span>FYP Team Member</span>
+            </div>
+            <div class="member-status" title="Team member"></div>
+          </div>
+
+          <div class="member">
+            <div class="avatar brown">AM</div>
+            <div class="member-info">
+              <strong>Abdullah Mazhar</strong>
+              <span>FYP Team Member</span>
+            </div>
+            <div class="member-status" title="Team member"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card card-pad">
+
+        <div class="card-top">
+          <div class="card-title">Project Supervisor</div>
+          <span class="badge badge-green">Supervisor</span>
+        </div>
+
+        <div class="supervisor-box">
+
+          <div class="supervisor-header">
+            <div class="supervisor-avatar">RA</div>
+
+            <div>
+              <h3>Ma’am Rabiya Ali</h3>
+              <p>FYP Project Supervisor</p>
+            </div>
+          </div>
+
+          <div class="supervisor-details">
+
+            <div>
+              <span>🎓</span>
+              <strong>Academic Supervisor</strong>
+            </div>
+
+            <div>
+              <span>🏛️</span>
+              <strong>The University of Lahore</strong>
+            </div>
+
+            <div>
+              <span>📚</span>
+              <strong>Final Year Project</strong>
+            </div>
+
+            <div>
+              <span>✓</span>
+              <strong>Project Guidance & Review</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================================
+     UNIVERSITY & CONTACT
+========================================= -->
+
+<section class="section" id="university">
+  <div class="container">
+
+    <div class="section-heading">
+      <div class="eyebrow">✦ University Information</div>
+      <h2>Academic project details</h2>
+      <p>Information about the institution and project workspace.</p>
+    </div>
+
+    <div class="university-grid">
+
+      <div class="uni-detail-card">
+
+        <span class="badge"
+              style="background:rgba(255,255,255,.12);color:white;">
+          🎓 Academic Institution
+        </span>
+
+        <h3>The University<br>of Lahore</h3>
+
+        <p>
+          A centralized academic project management workspace
+          for students, supervisors, and project evaluators.
+        </p>
+
+        <ul class="uni-detail-list">
+          <li><b>Institution</b> The University of Lahore</li>
+          <li><b>University Contact</b> info@uol.edu.pk</li>	
+          <li><b>Location</b> 1-Km Defence Road, Near Bhuptian Chowk, Lahore, Pakistan 54792</li>
+          <li><b>Project</b> FYP ProgressHub</li>
+          <li><b>Academic Session</b> 2024-2028</li>
+        </ul>
+
+      </div>
+
+      <div class="card contact-card">
+
+        <div class="card-title">Contact Information</div>
+
+        <p class="muted" style="font-size:.8rem;margin-top:7px;">
+          Connect with the FYP team for project-related
+          communication and academic coordination.
+        </p>
+
+        <div class="contact-list">
+
+          <div class="contact-item">
+            <div class="contact-icon">✉</div>
+            <div>
+              <strong>Email</strong>
+              <span>70153954@student.uol.edu.pk</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <strong>Location</strong>
+              <span>Lahore, Punjab, Pakistan</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">🎓</div>
+            <div>
+              <strong>University</strong>
+              <span>The University of Lahore</span>
+            </div>
+          </div>
+
+        </div>
+
+    <div class="contact-box">
+  <h2>Contact Team</h2>
+
+  <div
+    id="thankYouMessage"
+    class="thank-you-message"
+    role="status"
+    aria-live="polite"
+  >
+    🤖 Thank you! Your message is being sent.
+  </div>
+
+  <form
+    class="contact-form"
+    id="contactForm"
+    action="https://formsubmit.co/70153954@student.uol.edu.pk"
+    method="POST"
+  >
+    <input
+      type="hidden"
+      name="_subject"
+      value="New FYP ProgressHub Contact Message"
+    >
+
+    <input
+      type="hidden"
+      name="_template"
+      value="table"
+    >
+
+    <input
+      type="hidden"
+      name="_captcha"
+      value="false"
+    >
+
+    <div class="form-group">
+      <label for="contactName">Your Name</label>
+
+      <input
+        class="form-control"
+        id="contactName"
+        name="name"
+        type="text"
+        maxlength="80"
+        required
+        placeholder="Enter your name"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="contactEmail">Your Email Address</label>
+
+      <input
+        class="form-control"
+        id="contactEmail"
+        name="email"
+        type="email"
+        maxlength="120"
+        required
+        placeholder="Enter your email address"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="contactMessage">Message</label>
+
+      <textarea
+        class="form-control"
+        id="contactMessage"
+        name="message"
+        maxlength="500"
+        rows="5"
+        required
+        placeholder="Write your message..."
+      ></textarea>
+    </div>
+
+    <button class="btn btn-green" type="submit">
+      Send Message →
+    </button>
+  </form>
+</div>
+
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+  <div class="container">
+
+    <div class="footer-top">
+
+      <div class="footer-brand">
+
+        <div class="brand">
+          <div class="brand-mark">✦</div>
+          <div class="brand-text">
+            <strong>FYP ProgressHub</strong>
+            <span>Academic Project Management</span>
+          </div>
+        </div>
+
+        <p>
+          A professional dashboard for organizing,
+          tracking, and presenting Final Year Project progress.
+        </p>
+
+      </div>
+
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <a href="#home">Overview</a>
+        <a href="#goals">Goals</a>
+        <a href="#documents">Documents</a>
+        <a href="#team">Team</a>
+      </div>
+
+      <div class="footer-links">
+        <h4>Academic</h4>
+        <a href="#university">University</a>
+        <a href="#team">Supervisor</a>
+        <a href="#overview">Project Details</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2027-28 FYP ProgressHub. All rights reserved.</span>
+      <span>Designed for Final Year Project Management.</span>
+    </div>
+
+  </div>
+</footer>
+
+<!-- =========================================
+     CURSOR ROBOT
+========================================= -->
+
+<div id="robot" aria-hidden="true">
+  <div class="robot-antenna"></div>
+  <div class="robot-dot"></div>
+  <div class="robot-body">
+    <div class="robot-eye left"></div>
+    <div class="robot-eye right"></div>
+    <div class="robot-mouth"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================
+   FYP PROGRESSHUB JAVASCRIPT
+========================================= */
+
+"use strict";
+
+/* -----------------------------------------
+   1. INITIAL DATA
+----------------------------------------- */
+
+let goals = [
+  {
+    id: 1,
+    title: "Project Planning & Research",
+    description: "Complete project research and planning.",
+    progress: 0
+  },
+  {
+    id: 2,
+    title: "System Design & Development",
+    description: "Develop the main dashboard interface.",
+    progress: 0
+  },
+  {
+    id: 3,
+    title: "Testing & Evaluation",
+    description: "Test all modules and improve functionality.",
+    progress: 0
+  },
+  {
+    id: 4,
+    title: "Final Documentation",
+    description: "Prepare final report and presentation.",
+    progress: 0
+  }
+];
+
+/* Demo documents are informational.
+   Replace them with actual files or upload
+   functionality when connecting a backend. */
+
+const documents = [
+  "Project Proposal",
+  "Software Requirements",
+  "System Design",
+  "Progress Report",
+  "Meeting Notes",
+  "Final Report"
+];
+
+/* -----------------------------------------
+   2. ELEMENT REFERENCES
+----------------------------------------- */
+
+const $ = (selector) => document.querySelector(selector);
+
+const goalList = $("#goalList");
+const goalForm = $("#goalForm");
+const totalGoals = $("#totalGoals");
+const completedGoals = $("#completedGoals");
+const projectProgress = $("#projectProgress");
+const overallProgress = $("#overallProgress");
+const overallProgressBar = $("#overallProgressBar");
+const overallProgressCaption = $("#overallProgressCaption");
+const goalRatio = $("#goalRatio");
+const goalRatioBar = $("#goalRatioBar");
+const goalBadge = $("#goalBadge");
+const themeToggle = $("#themeToggle");
+const menuToggle = $("#menuToggle");
+const navLinks = $("#navLinks");
+
+/* -----------------------------------------
+   3. TOAST NOTIFICATION
+----------------------------------------- */
+
+let toastTimer;
+
+function showToast(message) {
+  const oldToast = document.querySelector(".toast");
+
+  if (oldToast) {
+    oldToast.remove();
+  }
+
+  clearTimeout(toastTimer);
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.setAttribute("role", "status");
+  toast.textContent = message;
+
+  document.body.appendChild(toast);
+
+  toastTimer = setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+/* -----------------------------------------
+   4. GOAL RENDERING
+----------------------------------------- */
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
+
+function renderGoals() {
+  goalList.innerHTML = "";
+
+  if (goals.length === 0) {
+    goalList.innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:2rem;margin-bottom:8px;">🎯</div>
+        <strong>No goals yet</strong>
+        <p>Add your first project goal using the form.</p>
+      </div>
+    `;
+    updateStats();
+    return;
+  }
+
+  goals.forEach((goal) => {
+    const completed = goal.progress === 100;
+
+    const item = document.createElement("div");
+    item.className = "goal-item";
+
+    item.innerHTML = `
+      <div class="goal-top">
+
+        <div class="goal-name">
+          <span class="check">${completed ? "✓" : "○"}</span>
+          <span>${escapeHTML(goal.title)}</span>
+        </div>
+
+        <span class="badge ${completed ? "badge-green" : "badge-purple"}">
+          ${completed ? "Completed" : "In Progress"}
+        </span>
+
+      </div>
+
+      <div class="goal-description">
+        ${escapeHTML(goal.description || "No description provided.")}
+      </div>
+
+      <div class="goal-bottom">
+
+        <div class="progress-track">
+          <div class="progress-fill ${completed ? "green" : ""}"
+               style="width:${goal.progress}%;">
+          </div>
+        </div>
+
+        <div class="goal-percent">${goal.progress}%</div>
+
+      </div>
+
+      <div class="goal-actions">
+
+        <button class="btn btn-light"
+                type="button"
+                data-action="increase"
+                data-id="${goal.id}"
+                ${completed ? "disabled" : ""}>
+          +10%
+        </button>
+
+        <button class="btn btn-outline"
+                type="button"
+                data-action="complete"
+                data-id="${goal.id}"
+                ${completed ? "disabled" : ""}>
+          ✓ Complete
+        </button>
+
+        <button class="btn btn-danger"
+                type="button"
+                data-action="delete"
+                data-id="${goal.id}">
+          Delete
+        </button>
+
+      </div>
+    `;
+
+    goalList.appendChild(item);
+  });
+
+  updateStats();
+}
+
+/* -----------------------------------------
+   5. GOAL ACTIONS
+----------------------------------------- */
+
+goalList.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+
+  if (!button) return;
+
+  const id = Number(button.dataset.id);
+  const action = button.dataset.action;
+
+  const goal = goals.find((item) => item.id === id);
+
+  if (!goal) return;
+
+  if (action === "increase") {
+    goal.progress = Math.min(100, goal.progress + 10);
+    showToast("Goal progress increased by 10%.");
+  }
+
+  if (action === "complete") {
+    goal.progress = 100;
+    showToast("Goal marked as completed.");
+  }
+
+  if (action === "delete") {
+    goals = goals.filter((item) => item.id !== id);
+    showToast("Goal deleted.");
+  }
+
+  renderGoals();
+});
+
+goalForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const title = $("#goalTitle").value.trim();
+  const description = $("#goalDescription").value.trim();
+  const progress = Number($("#goalStartProgress").value);
+
+  if (!title) {
+    showToast("Please enter a goal title.");
+    return;
+  }
+
+  goals.push({
+    id: Date.now(),
+    title,
+    description,
+    progress
+  });
+
+  goalForm.reset();
+
+  showToast("New goal added successfully.");
+  renderGoals();
+});
+
+/* -----------------------------------------
+   6. PROJECT STATISTICS
+----------------------------------------- */
+
+function updateStats() {
+  const total = goals.length;
+
+  const completed = goals.filter(
+    (goal) => goal.progress === 100
+  ).length;
+
+  const average = total === 0
+    ? 0
+    : Math.round(
+        goals.reduce((sum, goal) => sum + goal.progress, 0) / total
+      );
+
+  totalGoals.textContent = total;
+  completedGoals.textContent = completed;
+  projectProgress.textContent = average + "%";
+
+  overallProgress.textContent = average + "%";
+  overallProgressCaption.textContent = average + "%";
+  overallProgressBar.style.width = average + "%";
+
+  goalRatio.textContent = completed + " / " + total;
+  goalRatioBar.style.width = total === 0
+    ? "0%"
+    : (completed / total * 100) + "%";
+
+  goalBadge.textContent = total + (total === 1 ? " Goal" : " Goals");
+}
+
+/* -----------------------------------------
+   7. DOCUMENTATION CENTER
+----------------------------------------- */
+
+document.querySelectorAll("[data-doc]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const name = button.dataset.doc;
+
+    showToast(
+      name + " is a demo document. Connect your actual file to view it."
+    );
+  });
+});
+
+/* -----------------------------------------
+   8. DOCUMENT CHECKLIST
+----------------------------------------- */
+
+const checklist = document.querySelectorAll(".doc-check");
+const docProgressBar = $("#docProgressBar");
+const docProgressText = $("#docProgressText");
+
+function updateDocProgress() {
+  const checked = [...checklist].filter(
+    (input) => input.checked
+  ).length;
+
+  const total = checklist.length;
+  const percentage = total === 0
+    ? 0
+    : Math.round(checked / total * 100);
+
+  docProgressBar.style.width = percentage + "%";
+  docProgressText.textContent = percentage + "%";
+}
+
+checklist.forEach((input) => {
+  input.addEventListener("change", updateDocProgress);
+});
+
+$("#resetChecklist").addEventListener("click", () => {
+  checklist.forEach((input) => {
+    input.checked = false;
+  });
+
+  updateDocProgress();
+  showToast("Documentation checklist reset.");
+});
+
+/* -----------------------------------------
+   9. CONTACT FORM
+----------------------------------------- */
+
+const contactForm = $("#contactForm");
+const thankYouMessage = $("#thankYouMessage");
+
+contactForm.addEventListener("submit", (event) => {
+  const name = $("#contactName").value.trim();
+  const email = $("#contactEmail").value.trim();
+  const message = $("#contactMessage").value.trim();
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!name || !email || !message) {
+    event.preventDefault();
+    showToast("Please complete all contact fields.");
+    return;
+  }
+
+  if (!emailPattern.test(email)) {
+    event.preventDefault();
+    showToast("Please enter a valid email address.");
+    return;
+  }
+
+  /*
+    Show the message before FormSubmit redirects.
+    Do not prevent the default submit here.
+  */
+
+  thankYouMessage.classList.add("show");
+
+  setTimeout(() => {
+    thankYouMessage.classList.remove("show");
+  }, 3000);
+});
+
+/* -----------------------------------------
+   10. DARK MODE
+----------------------------------------- */
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  const dark = document.body.classList.contains("dark");
+
+  themeToggle.textContent = dark ? "☀" : "☾";
+  themeToggle.setAttribute(
+    "aria-label",
+    dark ? "Switch to light mode" : "Switch to dark mode"
+  );
+});
+
+/* -----------------------------------------
+   11. MOBILE NAVIGATION
+----------------------------------------- */
+
+menuToggle.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("open");
+
+  menuToggle.setAttribute("aria-expanded", String(open));
+});
+
+document.querySelectorAll(".nav-link").forEach((link) => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  });
+});
+
+/* -----------------------------------------
+   12. ACTIVE NAVIGATION
+----------------------------------------- */
+
+const navItems = document.querySelectorAll(".nav-link");
+const sections = document.querySelectorAll("main section[id]");
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        navItems.forEach((link) => {
+          link.classList.toggle(
+            "active",
+            link.getAttribute("href") === "#" + entry.target.id
+          );
+        });
+      }
+    });
+  },
+  {
+    rootMargin: "-25% 0px -60% 0px"
+  }
+);
+
+sections.forEach((section) => observer.observe(section));
+
+/* -----------------------------------------
+   13. CURSOR-FOLLOWING ROBOT
+   Desktop only. Disabled on small screens.
+----------------------------------------- */
+
+const robot = $("#robot");
+
+if (
+  window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+  !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+) {
+  let robotX = -100;
+  let robotY = -100;
+  let targetX = -100;
+  let targetY = -100;
+  let animationFrame = null;
+
+  document.addEventListener("mousemove", (event) => {
+    targetX = event.clientX + 14;
+    targetY = event.clientY + 14;
+  });
+
+  function animateRobot() {
+    robotX += (targetX - robotX) * 0.15;
+    robotY += (targetY - robotY) * 0.15;
+
+    robot.style.transform =
+      "translate(" + robotX + "px," + robotY + "px)";
+
+    animationFrame = requestAnimationFrame(animateRobot);
+  }
+
+  animateRobot();
+
+  window.addEventListener("beforeunload", () => {
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+  });
+}
+
+/* -----------------------------------------
+   14. INITIALIZE
+----------------------------------------- */
+
+renderGoals();
+updateDocProgress();
+
+</script>
+</body>
+</html>
